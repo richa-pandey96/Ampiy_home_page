@@ -1,35 +1,66 @@
-// 
 import 'package:flutter/material.dart';
 import 'crypto_model.dart'; // Import your Crypto model file
 import 'package:provider/provider.dart';
 import 'crypto_detailpage.dart';
 
-class CoinsScreen extends StatelessWidget {
+class CoinsScreen extends StatefulWidget {
+  final List<Crypto> cryptoList;
+  CoinsScreen({required this.cryptoList});
 
-  final List<Crypto> cryptoList ;
-   CoinsScreen({required this.cryptoList});
+  @override
+  _CoinsScreenState createState() => _CoinsScreenState();
+}
 
+class _CoinsScreenState extends State<CoinsScreen> {
+  List<Crypto> _filteredCryptoList = [];
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredCryptoList = widget.cryptoList;
+    _searchController.addListener(_filterCryptoList);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterCryptoList);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterCryptoList() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredCryptoList = widget.cryptoList
+          .where((crypto) =>
+              crypto.symbol.toLowerCase().contains(query))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Access the List<Crypto> provided by StreamProvider
-    
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'All Coins',
-          style: TextStyle(
-            color: Colors.amber,
+        title: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'Search Coins...',
+            hintStyle: TextStyle(color: Colors.amber),
+            border: InputBorder.none,
           ),
+          style: TextStyle(color: Colors.amber, fontSize: 20),
+          cursorColor: Colors.amber,
         ),
         backgroundColor: Color.fromARGB(255, 41, 41, 41),
       ),
-      body: cryptoList.isEmpty
+      body: _filteredCryptoList.isEmpty
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: cryptoList.length,
+              itemCount: _filteredCryptoList.length,
               itemBuilder: (context, index) {
-                final crypto = cryptoList[index];
+                final crypto = _filteredCryptoList[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -61,10 +92,9 @@ class CoinsScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                // You can replace the Icon with an image of the cryptocurrency logo
                                 Icon(
-                                  Icons.currency_bitcoin, // Example icon
-                                  color: Colors.amber, // Change this icon color if needed
+                                  Icons.currency_bitcoin,
+                                  color: Colors.amber,
                                   size: 24,
                                 ),
                                 SizedBox(width: 8),

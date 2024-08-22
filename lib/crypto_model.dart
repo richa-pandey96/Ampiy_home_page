@@ -1,8 +1,8 @@
 class Crypto {
   final String symbol;
-  final String priceChange;
-  final String percentChange;
-  final String currentPrice;
+  late final String priceChange;
+  late final String percentChange;
+  late final String currentPrice;
 
   Crypto({
     required this.symbol,

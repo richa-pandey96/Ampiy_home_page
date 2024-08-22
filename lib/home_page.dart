@@ -119,6 +119,14 @@ class _CryptoScreenState extends State<CryptoScreen> with TickerProviderStateMix
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+         actions: [
+    IconButton(
+      icon: Icon(Icons.notifications),
+      onPressed: () {
+        // Handle the notification icon tap
+      },
+    ),
+  ],
       ),
     
       body: Stack(
@@ -260,8 +268,8 @@ class _CryptoScreenState extends State<CryptoScreen> with TickerProviderStateMix
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16), backgroundColor: Color.fromARGB(255, 50, 51, 52), // Text color
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30), // Rounded corners
-                                  side: BorderSide(color: Colors.white, width: 2), // Border color and width
+                                  borderRadius: BorderRadius.circular(10), // Rounded corners
+                                  side: BorderSide.none, // Border color and width
                                 ),
                                 shadowColor: Colors.black.withOpacity(0.5), // Shadow color
                                 elevation: 10, 
